@@ -47,8 +47,7 @@ import json
 client = RuckusVirtualSmartZoneAPIClient.Client()
 client.connect(url='https://localhost:8443', username='admin', password='Admin123')
 
-zone_id = '1234567890asdfg'
-response = client.get(method=f'/rkszones/{zone_id}/apgroups')
+response = client.get(method='/domains')
 print(json.dumps(response.json(), indent=4))
 
 client.disconnect()
@@ -62,11 +61,9 @@ import json
 client = RuckusVirtualSmartZoneAPIClient.Client()
 client.connect(url='https://localhost:8443', username='admin', password='Admin123')
 
-zone_id = '1234567890asdfg'
-response = client.post(method=f'/rkszones/{zone_id}/apgroups', data={'name': 'apGroupName',
-                                                                     'description': 'apGroupDescription',
-                                                                     'location': 'Location'})
-print(json.dumps(response.json(), indent=4))
+response = client.post(method='/domains', data={'name': 'TestDomain'})
+domain_id = response.json()['id']
+print(json.dumps(response.json(), indent=4)) # --> 201
 
 client.disconnect()
 ```
@@ -79,9 +76,9 @@ import json
 client = RuckusVirtualSmartZoneAPIClient.Client()
 client.connect(url='https://localhost:8443', username='admin', password='Admin123')
 
-zone_id = '1234567890asdfg'
-response = client.put(method=f'/rkszones/{zone_id}/apgroups', data={'name': 'apGroupNewName'})
-print(json.dumps(response.json(), indent=4))
+domain_id = '1234567890asdfg'
+response = client.patch(method=f'/domains/{domain_id}', data={'description': 'I updated this description.'})
+print(response.status_code) # --> 204
 
 client.disconnect()
 ```
@@ -93,10 +90,9 @@ import RuckusVirtualSmartZoneAPIClient
 client = RuckusVirtualSmartZoneAPIClient.Client()
 client.connect(url='https://localhost:8443', username='admin', password='Admin123')
 
-zone_id = '1234567890asdfg'
-group_id = 'asdfgh123654798'
-response = client.delete(method=f'/rkszones/{zone_id}/apgroups/{group_id}')
-print(response.status_code)
+domain_id = '1234567890asdfg'
+response = client.delete(method=f'/domains/{domain_id}')
+print(response.status_code) # --> 204
 
 client.disconnect()
 ```
